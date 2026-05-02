@@ -60,5 +60,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/settings/update', [ProfileController::class, 'updateAdminSettings'])->name('admin.settings.update');
         Route::delete('/user/delete/{id}', [ProfileController::class, 'destroyUser'])->name('admin.user.delete');
     });
+    Route::post('/store-job', [ProfileController::class, 'storeJob'])->name('job.store');
+    // resources/routes/web.php
+Route::get('/associated-companies', [ProfileController::class, 'associatedCompanies'])->name('associated.companies');
 
 });

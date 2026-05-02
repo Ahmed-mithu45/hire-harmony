@@ -43,7 +43,7 @@
                 <div class="col-md-3 d-flex">
                     <div class="bg-light align-self-stretch box p-4 text-center">
                         <h3 class="mb-4">Website</h3>
-                        <p><a href="{{ url('/') }}">hireharmony.com</a></p>
+                        <p><a href="{{ url('https://uits.ac.bd/') }}" target="_blank">hireharmony.com</a></p>
                     </div>
                 </div>
             </div>

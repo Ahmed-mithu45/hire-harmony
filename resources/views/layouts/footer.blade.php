@@ -29,8 +29,7 @@
                                     class="fa fa-chevron-right mr-2"></span>Post a Circular</a></li>
                         <li><a href="{{ url('/login') }}" class="py-2 d-block"><span
                                     class="fa fa-chevron-right mr-2"></span>Create Unique ID</a></li>
-                        <li><a href="#" class="py-2 d-block"><span class="fa fa-chevron-right mr-2"></span>Career
-                                Advice</a></li>
+                        <li><a href="{{ url('/login') }}" class="py-2 d-block"><span class="fa fa-chevron-right mr-2"></span>post a job</a></li>
                     </ul>
                 </div>
             </div>
@@ -44,9 +43,9 @@
                                     class="fa fa-chevron-right mr-2"></span>Home</a></li>
                         <li><a href="{{ url('/about') }}" class="py-2 d-block"><span
                                     class="fa fa-chevron-right mr-2"></span>About Us</a></li>
-                        <li><a href="#" class="py-2 d-block"><span
+                        <li><a href="{{ url('/associated-companies') }}" class="py-2 d-block"><span
                                     class="fa fa-chevron-right mr-2"></span>Partners</a></li>
-                        <li><a href="#" class="py-2 d-block"><span
+                        <li><a href="{{ url('/contact') }}" class="py-2 d-block"><span
                                     class="fa fa-chevron-right mr-2"></span>Contact</a></li>
                     </ul>
                 </div>

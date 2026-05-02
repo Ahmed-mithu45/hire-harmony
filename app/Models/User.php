@@ -14,25 +14,13 @@ class User extends Authenticatable
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'user_type',
-        'role',          // Added for Admin support
-        'unique_id',
-        'dob',
-        'address',
-        'phone',
-        'title',
-        'summary',
-        'skills',
-        'cv_path',
-        'profile_photo',
-        'cover_photo',   // Added for Company Profile support
-        'github_url',
-        'linkedin_url',
-        'portfolio_url'
-    ];
+    'name', 'email', 'password', 'user_type', 'role', 
+    'unique_id', 'dob', 'address', 'phone', 'title', 
+    'summary', 'skills', 'cv_path', 'profile_photo', 
+    'cover_photo', 'github_url', 'linkedin_url', 
+    'preferred_jobs', // Ensure comma here
+    'portfolio_url'
+];
 
     /**
      * The attributes that should be hidden for serialization.

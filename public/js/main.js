@@ -294,5 +294,17 @@ var jobFilter = function() {
     };
     jobFilter();
 
+	document.querySelectorAll('.status-select').forEach(select => {
+            select.addEventListener('change', function() {
+                const appId = this.getAttribute('data-app-id');
+                const timeDiv = document.getElementById('timeInput' + appId);
+                if (this.value === 'Interview Set') {
+                    timeDiv.classList.remove('d-none');
+                } else {
+                    timeDiv.classList.add('d-none');
+                }
+            });
+        });
+
 })(jQuery);
 

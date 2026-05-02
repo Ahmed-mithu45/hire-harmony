@@ -84,60 +84,89 @@
                     </div>
 
                     {{-- JOB DETAILS MODAL --}}
-                    <div class="modal fade" id="jobModal{{ $job->id }}" tabindex="-1" role="dialog">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content" style="border-radius: 15px; border: none; overflow: hidden;">
-                                <div class="modal-header border-0 bg-light p-4">
-                                    <h5 class="modal-title font-weight-bold">{{ $job->title }}</h5>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body p-4">
-                                    <div class="d-flex align-items-center mb-4">
-                                        <img src="{{ $job->company->profile_photo ? asset('images/profiles/' . $job->company->profile_photo) : asset('images/company-placeholder.jpg') }}"
-                                            style="width: 50px; height: 50px; object-fit: contain;" class="mr-3">
-                                        <div>
-                                            <h6 class="text-primary font-weight-bold mb-0">{{ $job->company_name }}</h6>
-                                            <small class="text-muted">{{ $job->category }}</small>
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-4">
-                                        <div class="col-6">
-                                            <small class="text-muted d-block">Employment Type</small>
-                                            <strong>{{ $job->job_type }}</strong>
-                                        </div>
-                                        <div class="col-6">
-                                            <small class="text-muted d-block">Openings</small>
-                                            <strong>{{ $job->openings }} Positions</strong>
-                                        </div>
-                                    </div>
-
-                                    <h6 class="font-weight-bold">Description</h6>
-                                    <p class="text-muted small" style="white-space: pre-line; line-height: 1.6;">
-                                        {{ $job->description }}</p>
-
-                                    <hr>
-                                    <div class="d-flex justify-content-between align-items-center mt-3">
-                                        <span class="text-muted small"><i class="fa fa-calendar mr-1"></i> Posted
-                                            {{ $job->created_at->format('M d, Y') }}</span>
-
-                                        @if (Auth::check() && Auth::user()->user_type == 'candidate')
-                                            @if (in_array($job->id, $appliedJobIds))
-                                                <span class="text-success font-weight-bold"><i class="fa fa-check"></i>
-                                                    Already Applied</span>
-                                            @else
-                                                <form action="{{ route('jobs.apply', $job->id) }}" method="POST">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-orange text-white px-4"
-                                                        style="background: #ff6a00; border-radius: 8px;">Apply Now</button>
-                                                </form>
-                                            @endif
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+<div class="modal fade" id="jobModal{{ $job->id }}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document"> {{-- Added modal-lg for more space --}}
+        <div class="modal-content" style="border-radius: 15px; border: none; overflow: hidden;">
+            <div class="modal-header border-0 bg-light p-4">
+                <h5 class="modal-title font-weight-bold">{{ $job->title }}</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body p-4">
+                {{-- Company Info --}}
+                <div class="d-flex align-items-center mb-4">
+                    <img src="{{ $job->company->profile_photo ? asset('images/profiles/' . $job->company->profile_photo) : asset('images/company-placeholder.jpg') }}"
+                        style="width: 50px; height: 50px; object-fit: contain;" class="mr-3">
+                    <div>
+                        <h6 class="text-primary font-weight-bold mb-0">{{ $job->company_name }}</h6>
+                        <small class="text-muted"><i class="fa fa-tag mr-1"></i>Category: {{ $job->category }}</small>
                     </div>
+                </div>
+
+                {{-- Key Stats Row --}}
+                <div class="row mb-4 p-3 bg-light mx-0" style="border-radius: 10px;">
+                    <div class="col-6 col-md-3 mb-2">
+                        <small class="text-muted d-block">Job Type</small>
+                        <strong>{{ $job->job_type }}</strong>
+                    </div>
+                    <div class="col-6 col-md-3 mb-2">
+                        <small class="text-muted d-block">Openings</small>
+                        <strong>{{ $job->openings }} Positions</strong>
+                    </div>
+                    <div class="col-12 col-md-6 mb-2">
+                        <small class="text-muted d-block">Required Education</small>
+                        <strong>{{ $job->educations ?? 'Not Specified' }}</strong>
+                    </div>
+                </div>
+
+                {{-- Skills Needed --}}
+                <div class="mb-4">
+                    <h6 class="font-weight-bold"><i class="fa fa-cog mr-2 text-primary"></i>Required Skills</h6>
+                    <p class="text-muted small">{{ $job->skills_needed ?? 'No specific skills listed.' }}</p>
+                </div>
+
+                {{-- Short Description --}}
+                <div class="mb-4">
+                    <h6 class="font-weight-bold">Summary</h6>
+                    <p class="text-muted small">{{ $job->description }}</p>
+                </div>
+
+                {{-- Full Job Details --}}
+                <div class="mb-4">
+                    <h6 class="font-weight-bold">Full Job Responsibilities & Details</h6>
+                    <div class="p-3 border rounded" style="background-color: #fafafa;">
+                        <p class="text-muted small mb-0" style="white-space: pre-line; line-height: 1.6;">
+                            {{ $job->job_details ?? 'No additional details provided.' }}
+                        </p>
+                    </div>
+                </div>
+
+                <hr>
+                
+                {{-- Footer Info & Apply Button --}}
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="text-muted small"><i class="fa fa-calendar mr-1"></i> Posted
+                        {{ $job->created_at->format('M d, Y') }}</span>
+
+                    @auth
+                        @if (Auth::user()->user_type == 'candidate')
+                            @if (isset($appliedJobIds) && in_array($job->id, $appliedJobIds))
+                                <span class="text-success font-weight-bold"><i class="fa fa-check"></i> Already Applied</span>
+                            @else
+                                <form action="{{ route('jobs.apply', $job->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-orange text-white px-4"
+                                        style="background: #ff6a00; border-radius: 8px;">Apply Now</button>
+                                </form>
+                            @endif
+                        @endif
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-primary px-4" style="border-radius: 8px;">Login to Apply</a>
+                    @endauth
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                 @empty
                     <div class="col-12 text-center py-5">
                         <img src="{{ asset('images/no-jobs.png') }}" style="width: 80px; opacity: 0.3;" class="mb-3">
