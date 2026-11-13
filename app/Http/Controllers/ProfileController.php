@@ -348,6 +348,10 @@ public function viewApplicants(Request $request, $id)
     public function applyForJob($id)
     {
         if (Auth::user()->user_type !== 'candidate') return back()->with('error', 'Only candidates can apply.');
+        
+        // FIX: Ensure the job actually exists, otherwise throw a 404
+        $job = JobCircular::findOrFail($id);
+        
         $exists = Application::where('user_id', Auth::id())->where('job_circular_id', $id)->exists();
         if ($exists) return back()->with('error', 'Already applied.');
         Application::create(['user_id' => Auth::id(), 'job_circular_id' => $id, 'status' => 'Pending']);
@@ -442,7 +446,14 @@ public function viewApplicants(Request $request, $id)
 
     public function updateApplicationStatus(Request $request,int $id)
     {
-        $application = Application::findOrFail($id);
+        // FIX: Eager load the job circular to check ownership
+        $application = Application::with('jobCircular')->findOrFail($id);
+        
+        // FIX: Block the company if they don't own the job
+        if ($application->jobCircular->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $status = $request->status;
         $application->update([
             'status' => $status,

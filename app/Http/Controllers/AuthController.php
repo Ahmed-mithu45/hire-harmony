@@ -17,7 +17,7 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             // Added the 'confirmed' rule here
             'password' => 'required|string|min:8|confirmed',
-            'user_type' => 'required'
+            'user_type' => 'required|in:candidate,company'
         ]);
 
         $year = date('Y');
